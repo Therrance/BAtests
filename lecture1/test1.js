@@ -1,27 +1,45 @@
+// Constructor functions
 function Man(name, age){
     this.name = name;
     this.age = age;
-    this.live = function(){
-        console.log(this.name +' : '+this.age);
-        };
     return this;
     }
-
-function Student(){
-    this.study = function(){
-        console.log('study');
+    
+Man.prototype.live = function() {
+        console.log(this.name +' : '+this.age);
     };
 
-    this.duckType = function(){
-        return 'Student';
-    };
-}
+var Student = function(name, age) {    
+    Man.call(this, name, age);
+    duckType(this);
+};
 
 Student.prototype = new Man();
 
-var study = new Student();
-var man = new Man();
-        
+Student.prototype.study = function() {
+    console.log('study');
+};
+
+// Object.create() method
+var Man = {
+  constructor: function(name, age) {
+    this.name = name;
+    this.age = age;
+    return this;
+  },
+  live: function() {
+    console.log(this.name +' : '+this.age);
+  }
+};
+
+var Student = Object.create(Man);
+
+Student.study = function() {
+  console.log('study');
+};
+
+
+
 function duckType(myObject){
     if(myObject.hasOwnProperty('study')){
         return 'Student';
@@ -30,8 +48,10 @@ function duckType(myObject){
     }
 }
 
-console.log(duckType(man));
-console.log(duckType(study));
+function duckType(person) {
+  return person.study ? 'Student' : 'Man';
+}
 
-console.log(man.duckType.apply(man, []));
-console.log(study.duckType.apply(study, []));
+function duckType() {
+  return this.study ? 'Student' : 'Man';
+}
